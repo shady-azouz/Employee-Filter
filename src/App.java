@@ -21,12 +21,14 @@ public class App {
                         (Map<String, List<Employee>> map) -> {
                             String outputString = "";
                             for (var entry : map.entrySet()) {
-                                if (entry.getValue().size() > 1)
+                                boolean flag = entry.getValue().size() > 1;
+                                if (flag)
                                     outputString += entry.getKey() + '\n';
                                 else
                                     outputString += "Unique Title: " + entry.getKey() + '\n';
 
-                                outputString += "Count: " + entry.getValue().size() + '\n';
+                                if(flag)
+                                    outputString += "Count: " + entry.getValue().size() + '\n';
 
                                 for (var employee : entry.getValue()) {
                                     outputString += employee.toString() + '\n';
