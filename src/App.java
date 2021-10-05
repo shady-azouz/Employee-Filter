@@ -16,24 +16,25 @@ public class App {
                 new Employee("CTO", "Mohamed Nour", "01111111111")
         );
 
-        Map<String, List<Employee>> output = employees.stream().collect(Collectors.groupingBy(employee -> employee.getTitle()));
+        Map<String, List<Employee>> output = employees.stream()
+                .collect(Collectors.collectingAndThen(Collectors.groupingBy(Employee::getTitle),
+                        (Map<String, List<Employee>> map) -> {
+                            String outputString = "";
+                            for (var entry : map.entrySet()) {
+                                if (entry.getValue().size() > 1)
+                                    outputString += entry.getKey() + '\n';
+                                else
+                                    outputString += "Unique Title: " + entry.getKey() + '\n';
 
-        System.out.println(printMap(output));
-    }
+                                outputString += "Count: " + entry.getValue().size() + '\n';
 
-    private static String printMap(Map<String, List<Employee>> map) {
-        String output = "";
-        for (var entry : map.entrySet()) {
-            if (entry.getValue().size() > 1)
-                output += entry.getKey() + '\n';
-            else
-                output += "Unique Title: " + entry.getKey() + '\n';
-            output += "Count: " + entry.getValue().size() + '\n';
-            for (var employee : entry.getValue()) {
-                output += employee.toString() + '\n';
-            }
-            output += '\n';
-        }
-        return output;
+                                for (var employee : entry.getValue()) {
+                                    outputString += employee.toString() + '\n';
+                                }
+                                outputString += '\n';
+                            }
+                            System.out.println(outputString);
+                            return map;
+                }));
     }
 }
